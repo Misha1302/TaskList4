@@ -2,67 +2,31 @@
 
 var person = new Person
 {
-    Id = 123,
     Name = "Nick",
     Password = "qwerty",
-    Tasks = new List<Task>(),
-};
-var task = new Task
-{
-    Title = "Title",
-    Description = "Dsc",
-    Archived = false,
-    Finished = false
+    Tasks = new List<Task>
+    {
+        new()
+        {
+            Title = "Title",
+            Description = "Dsc",
+            Archived = false,
+            Finished = false
+        }
+    }
 };
 
-new AppContext().AddPerson(person);
-new AppContext().AddTask(task, person);
+using var appContext = new AppContext();
+appContext.Persons.Add(person);
+appContext.SaveChanges();
 
 Console.WriteLine("Hello, World!");
 
 
 public class AppContext : DbContext
 {
-    private DbSet<Person> Persons { get; set; } = null!;
-    private DbSet<Task> Tasks { get; set; } = null!;
-
-    public void AddPerson(Person p)
-    {
-        Persons.Add(p);
-        SaveChanges();
-    }
-
-    public void RemovePerson(Person p)
-    {
-        Persons.Remove(p);
-        SaveChanges();
-    }
-
-    public void UpdatePerson(Person p)
-    {
-        Persons.Update(p);
-        SaveChanges();
-    }
-
-    public void AddTask(Task t, Person p)
-    {
-        Tasks.Add(t);
-        p.Tasks.Add(t);
-        UpdatePerson(p);
-    }
-
-    public void RemoveTask(Task t, Person p)
-    {
-        Tasks.Remove(t);
-        p.Tasks.Remove(t);
-        UpdatePerson(p);
-    }
-
-    public void UpdateTask(Task t, Person p)
-    {
-        Tasks.Update(t);
-        SaveChanges();
-    }
+    public DbSet<Person> Persons { get; set; } = null!;
+    public DbSet<Task> Tasks { get; set; } = null!;
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
