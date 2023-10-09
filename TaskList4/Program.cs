@@ -16,12 +16,52 @@ var person = new Person
     }
 };
 
-using var appContext = new AppContext();
-appContext.Persons.Add(person);
-appContext.SaveChanges();
+using var crud = new CrudAppContext(new AppContext());
+crud.Add(person);
 
 Console.WriteLine("Hello, World!");
 
+
+public class CrudAppContext : IDisposable
+{
+    private readonly AppContext _appContext;
+
+    public CrudAppContext(AppContext appContext)
+    {
+        _appContext = appContext;
+    }
+
+    public void Dispose()
+    {
+        GC.SuppressFinalize(this);
+        _appContext.Dispose();
+    }
+
+    public Person? Get(Person p) => _appContext.Persons.Find(p);
+
+    public void Add(Person p)
+    {
+        _appContext.Persons.Add(p);
+        _appContext.SaveChanges();
+    }
+
+    public void Update(Person p)
+    {
+        _appContext.Persons.Update(p);
+        _appContext.SaveChanges();
+    }
+
+    public void Remove(Person p)
+    {
+        _appContext.Persons.Remove(p);
+        _appContext.SaveChanges();
+    }
+
+    ~CrudAppContext()
+    {
+        _appContext.Dispose();
+    }
+}
 
 public class AppContext : DbContext
 {
