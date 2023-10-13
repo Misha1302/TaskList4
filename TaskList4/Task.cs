@@ -2,8 +2,8 @@ namespace TaskList4;
 
 public class Task : Entity
 {
-    public required string Title { get; set; }
-    public required string Description { get; set; }
-    public required bool IsActive { get; set; }
+    public string Title { get; set; } = null!;
+    public string Description { get; set; } = null!;
+    public bool IsActive { get; set; } = true;
     public bool Finished => !IsActive;
 }

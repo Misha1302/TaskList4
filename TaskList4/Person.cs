@@ -2,7 +2,7 @@ namespace TaskList4;
 
 public class Person : Entity
 {
-    public required string Name { get; set; }
-    public required string Password { get; set; }
-    public required List<Task> Tasks { get; set; }
+    public string Name { get; set; } = null!;
+    public string Password { get; set; } = null!;
+    public List<Task> Tasks { get; set; } = new List<Task>();
 }
